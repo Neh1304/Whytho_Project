@@ -25,6 +25,7 @@ const moodSets = {
 
 let currentMood = null;
 
+// Detect drink type from filename
 function detectType(filename) {
   filename = filename.toLowerCase();
   if (filename.includes("chai")) return "chai";
@@ -34,6 +35,28 @@ function detectType(filename) {
   return "default";
 }
 
+// When user selects a file
+document.getElementById("imageInput").addEventListener("change", function (event) {
+  const file = event.target.files[0];
+  const imagePreview = document.getElementById("drinkImage");
+  const placeholder = document.getElementById("previewPlaceholder");
+  const drinkName = document.getElementById("drinkName");
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      imagePreview.src = e.target.result;
+      imagePreview.style.display = "block";
+      placeholder.style.display = "none";
+
+      // Set drink name (basic way: use filename without extension)
+      const name = file.name.split(".")[0].replace(/[-_]/g, " ");
+      drinkName.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
 function scanMood() {
   const input = document.getElementById('imageInput');
   const canvas = document.getElementById('canvas');
@@ -41,7 +64,9 @@ function scanMood() {
   const moodDiv = document.getElementById('mood');
   const msgDiv = document.getElementById('message');
   const emojiDiv = document.getElementById('emojiFace');
+  const moodInfo = document.getElementById('moodInfo');
   const tweetBox = document.getElementById('tweetBox');
+
   tweetBox.style.display = "none";
 
   if (!input.files.length) {
@@ -61,8 +86,9 @@ function scanMood() {
   moodDiv.textContent = `☕ Mood: ${currentMood.mood}`;
   msgDiv.textContent = currentMood.message;
   emojiDiv.textContent = currentMood.emoji;
+  moodInfo.style.display = "block";
 
-  // Apply dynamic color and font
+  // Apply dynamic mood styling
   document.body.style.backgroundColor = currentMood.color;
   document.body.style.color = "#000";
   document.body.style.fontFamily = "'Comic Sans MS', cursive, sans-serif";
@@ -80,6 +106,14 @@ function generateTweet() {
     return;
   }
   const tweet = `"${currentMood.mood}" just told me: ‘${currentMood.message}’ 🧃💬 #MoodJuice #WhyTho`;
-  document.getElementById("tweetBox").textContent = tweet;
+  document.getElementById("tweetContent").textContent = tweet;
   document.getElementById("tweetBox").style.display = "block";
 }
+
+function copyTweet() {
+  const tweet = document.getElementById("tweetContent").textContent;
+  navigator.clipboard.writeText(tweet).then(() => {
+    alert("Tweet copied to clipboard!");
+  });
+}
+  
