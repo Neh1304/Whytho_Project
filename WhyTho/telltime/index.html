@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TellTime - Delightfully Useless Facts</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+  
+  <!-- Grid Background -->
+  <div class="grid-background">
+    <div class="grid-static"></div>
+    <div class="grid-moving"></div>
+    <div class="grid-diagonal"></div>
+    <div class="grid-dots"></div>
+    <div class="grid-highlight"></div>
+  </div>
+
+  <!-- Moving Elements -->
+  <div class="moving-elements">
+    <!-- Flying Facts -->
+    <div class="fact-bubble fact-1">📊</div>
+    <div class="fact-bubble fact-2">🧠</div>
+    <div class="fact-bubble fact-3">💡</div>
+    <div class="fact-bubble fact-4">🔍</div>
+    
+    <!-- Floating Clocks -->
+    <div class="clock-float clock-1">⏰</div>
+    <div class="clock-float clock-2">⏲️</div>
+    <div class="clock-float clock-3">🕐</div>
+    
+    <!-- Email Packets -->
+    <div class="email-packet packet-1">📧</div>
+    <div class="email-packet packet-2">📬</div>
+    <div class="email-packet packet-3">📮</div>
+  </div>
+  
+  <!-- Progress Bar -->
+  <div class="progress-bar"></div>
+
+  <!-- Intro Animation Screen -->
+  <div id="intro">
+    <div class="intro-icon">⏰</div>
+    <h1>TellTime</h1>
+    <p class="tagline">Delightfully Useless Facts... Delivered Right to Your Inbox!</p>
+    <div class="loading-dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="mainContent">
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-icon">⏰</div>
+        <h1>TellTime</h1>
+        <p class="subtitle">Delightfully Useless Facts... Delivered Right to Your Inbox!</p>
+      </header>
+
+      <!-- Main Card -->
+      <div class="main-card glass">
+        <div class="card-header">
+          <h2>Get Your Daily Dose of Pointless Knowledge</h2>
+          <p>Because who doesn't need to know that honey never spoils? 🍯</p>
+        </div>
+        
+        <form id="emailForm" class="email-form">
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="email" id="emailInput" placeholder="Enter your email address" required />
+              <div class="input-glow"></div>
+            </div>
+            <button type="submit" class="submit-btn">
+              <span class="btn-text">Send Me a Fact</span>
+              <div class="btn-glow"></div>
+            </button>
+          </div>
+        </form>
+        
+        <div id="responseMessage" class="response-message"></div>
+        
+        <!-- Fun Facts Preview -->
+        <div class="preview-facts">
+          <h3>Sample Facts You'll Receive:</h3>
+          <div class="fact-carousel">
+            <div class="fact-item active">
+              <span class="fact-icon">🦒</span>
+              <p>"A giraffe's tongue is 20 inches long and blue-black in color!"</p>
+            </div>
+            <div class="fact-item">
+              <span class="fact-icon">🐙</span>
+              <p>"Octopuses have three hearts and blue blood!"</p>
+            </div>
+            <div class="fact-item">
+              <span class="fact-icon">🍌</span>
+              <p>"Bananas are berries, but strawberries aren't!"</p>
+            </div>
+            <div class="fact-item">
+              <span class="fact-icon">🌙</span>
+              <p>"The Moon is gradually moving away from Earth!"</p>
+            </div>
+          </div>
+          <div class="carousel-dots">
+            <span class="dot active" data-slide="0"></span>
+            <span class="dot" data-slide="1"></span>
+            <span class="dot" data-slide="2"></span>
+            <span class="dot" data-slide="3"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card glass">
+          <div class="stat-icon">📧</div>
+          <div class="stat-number">1,337</div>
+          <div class="stat-label">Facts Delivered</div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-icon">🧠</div>
+          <div class="stat-number">42</div>
+          <div class="stat-label">Mind = Blown</div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-icon">⏰</div>
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Useless Service</div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>© 2025 TellTime | Part of the WhyTho™ Collection | Made with ❤️ and questionable priorities</p>
+        <div class="footer-links">
+          <a href="../index.html" class="footer-link">← Back to WhyTho™</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

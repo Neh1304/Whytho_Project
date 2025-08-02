@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoodJuice™ - Drink Emotion Analysis</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+  
+  <!-- Grid Background -->
+  <div class="grid-background">
+    <div class="grid-static"></div>
+    <div class="grid-moving"></div>
+    <div class="grid-diagonal"></div>
+  </div>
+
+  <!-- Floating Drink Elements -->
+  <div class="floating-elements">
+    <div class="drink-bubble bubble-1">🧃</div>
+    <div class="drink-bubble bubble-2">☕</div>
+    <div class="drink-bubble bubble-3">🥤</div>
+    <div class="drink-bubble bubble-4">🧋</div>
+  </div>
+
+  <!-- Back Button -->
+  <a href="../index.html" class="back-button">← Back to WhyTho™</a>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>MoodJuice™</h1>
+      <p class="subtitle">Upload a picture of your drink and get its emotional status. Support your chai's feelings today.</p>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <h2>Upload Your Drink</h2>
+        <p>Let our advanced AI analyze the emotional state of your beloved beverage</p>
+        
+        <div class="file-upload">
+          <input type="file" id="imageInput" accept="image/*" />
+          <label for="imageInput" class="file-upload-label">
+            <div class="file-upload-icon">🧃</div>
+            <div class="file-upload-text">Click to upload your drink image</div>
+          </label>
+        </div>
+
+        <div class="action-buttons">
+          <button class="mood-button primary" onclick="scanMood()">
+            <span class="button-icon">🧠</span>
+            Analyze Mood
+          </button>
+          
+          <button class="mood-button secondary" onclick="playCry()">
+            <span class="button-icon">🎻</span>
+            Cry with Your Chai
+          </button>
+          
+          <button class="mood-button tertiary" onclick="generateTweet()">
+            <span class="button-icon">🐦</span>
+            Tweet Feelings
+          </button>
+        </div>
+
+        <div class="loading" id="loading">
+          <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <p style="margin-top: 1rem; color: var(--text-secondary);">Analyzing drink emotions...</p>
+        </div>
+
+        <div id="statusMessage"></div>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-section">
+        <h2>Emotional Analysis</h2>
+        
+        <div class="image-preview" id="imagePreview">
+          <img id="drinkImage" style="display: none; max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 16px;" />
+          <div class="preview-placeholder" id="previewPlaceholder">Your drink will appear here</div>
+        </div>
+
+        <!-- Mood Display -->
+        <div class="mood-display">
+          <div class="emoji-container">
+            <div class="emoji" id="emojiFace">🥤</div>
+          </div>
+          
+          <div class="mood-info" id="moodInfo" style="display: none;">
+            <div class="mood-title" id="mood">Ready to analyze...</div>
+            <div class="mood-message" id="message">Upload your drink to discover its feelings!</div>
+          </div>
+        </div>
+
+        <!-- Tweet Box -->
+        <div class="tweet-box" id="tweetBox" style="display: none;">
+          <div class="tweet-header">
+            <span class="twitter-icon">🐦</span>
+            <span>Ready to Tweet</span>
+          </div>
+          <div class="tweet-content" id="tweetContent"></div>
+          <button class="tweet-button" onclick="copyTweet()">Copy Tweet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Canvas -->
+  <canvas id="canvas" width="400" height="400" style="display: none;"></canvas>
+
+  <!-- Audio Element -->
+  <audio id="violin" style="display: none;">
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5f37d558e4.mp3" type="audio/mp3">
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>

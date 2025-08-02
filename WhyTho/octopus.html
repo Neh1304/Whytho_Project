@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {margin:0; padding:0; box-sizing:border-box;}
+        body {
+            background: linear-gradient(135deg,#2c3e50,#34495e);
+            font-family: 'Arial',sans-serif;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            min-height: 100vh; padding:1rem;
+        }
+        .container { perspective: 1200px; display: flex; flex-direction: column; align-items: center; gap: 2rem;}
+        .title { color: white; font-size: clamp(2rem,5vw,3rem); font-weight: bold; text-align: center; text-shadow: 3px 3px 6px rgba(0,0,0,0.7); margin-bottom: 0.5rem;}
+        .subtitle { color: #ecf0f1; font-size: clamp(1rem,3vw,1.5rem); text-align: center; margin-bottom: 2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);}
+        .box-scene { position: relative; transform-style: preserve-3d; transform: rotateX(-15deg) rotateY(10deg); transition: transform 0.4s ease;}
+        .box-scene:hover { transform: rotateX(-20deg) rotateY(15deg) scale(1.05);}
+        .box-3d { position: relative; width: 300px; height: 300px; transform-style: preserve-3d;}
+        .box-face { position: absolute; background: linear-gradient(145deg,#95a5a6,#7f8c8d); border: 3px solid #5d6d7e; box-shadow: inset 0 0 20px rgba(0,0,0,0.3);}
+        .box-front { width: 300px; height: 300px; background: linear-gradient(145deg, #bdc3c7, #95a5a6); transform: translateZ(150px);}
+        .box-back { width:300px; height:300px; transform: translateZ(-150px);}
+        .box-left { width:300px; height:300px; transform: rotateY(-90deg) translateZ(150px);}
+        .box-right { width:300px; height:300px; transform: rotateY(90deg) translateZ(150px);}
+        .box-top { width:300px; height:300px; background: linear-gradient(145deg, #d5dbdb, #bdc3c7); transform: rotateX(90deg) translateZ(150px);}
+        .box-bottom { width:300px; height:300px; transform: rotateX(-90deg) translateZ(-150px);}
+        .glass-front {
+            position: absolute; width: 80%; height: 70%; top: 15%; left: 10%;
+            background: rgba(135, 206, 235, 0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 10px; backdrop-filter: blur(2px);
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.1),0 0 20px rgba(135,206,235,0.2); z-index:5;
+        }
+        .box-label {
+            position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%);
+            color: white; font-size: 0.9rem; font-weight: bold; text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); background: rgba(0,0,0,0.3);
+            padding: 5px 10px; border-radius: 5px; z-index: 6;
+        }
+        /* Lid */
+        .box-lid {
+            position: absolute; width: 300px; height:300px;
+            background: linear-gradient(145deg, #ecf0f1, #d5dbdb);
+            border: 3px solid #5d6d7e; border-radius: 5px;
+            top: -153px; left:0; transform-origin: 0% 100%;
+            transform: rotateX(0deg);
+            transition: transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 5px 10px rgba(255,255,255,0.2);
+        }
+        .box-lid.open { transform: rotateX(90deg);}
+        .box-lid.closing { transform: rotateX(45deg); transition: transform 0.6s ease-in-out;}
+
+        /* Switch */
+        .box-switch {
+            position: absolute; top: -178px; left: 100px;
+            width: 60px; height: 30px; background: linear-gradient(145deg,#e74c3c,#c0392b);
+            border: 3px solid #a93226; border-radius: 8px; cursor: pointer;
+            transition: all 0.3s; z-index: 20; box-shadow: 0 5px 15px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .box-switch:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231,76,60,0.5);}
+        .box-switch.on { background: linear-gradient(145deg,#27ae60,#229954); border-color: #1e8449; box-shadow: 0 8px 20px rgba(39,174,96,0.5);}
+        .switch-indicator { width: 14px; height:14px; background: radial-gradient(circle,#fff,#ecf0f1);
+            border-radius:50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: all 0.3s;}
+        .box-switch.on .switch-indicator { background: radial-gradient(circle,#fff,#e8f8f5); box-shadow: 0 0 10px rgba(255,255,255,0.8);}
+        /* Octopus (LARGER) */
+        .octopus-inside {
+            position: absolute; width: 160px; height: 160px;
+            bottom: 50px; left: 50%; transform: translateX(-50%);
+            z-index: 3; transition: transform 1.2s ease;
+        }
+        .octopus-inside.emerge { transform: translateX(-50%) translateY(-320px); z-index: 15;}
+        .octopus-inside.hiding { transform: translateX(-50%) translateY(-180px); z-index: 12; transition: transform 0.8s ease;}
+        .octopus-body {
+            width: 100%; height: 100%;
+            background: radial-gradient(ellipse 70% 67% at 40% 27%, #ff6b9d 60%, #ff1744 80%, #d81b60 100%);
+            border-radius: 60% 60% 45% 45%;
+            position: relative;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3), inset -5px -5px 19px rgba(0,0,0,0.22), inset 8px 7px 18px rgba(255,105,180,0.13);
+            animation: idle-bounce 4s ease-in-out infinite;
+        }
+        @keyframes idle-bounce {0%,100% {transform:translateY(0px) scale(1);} 50% {transform:translateY(-8px) scale(1.02);}}
+        /* EYES */
+        .octopus-eyes {
+            position: absolute; top: 28%; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px; z-index: 2;
+        }
+        .octopus-eye { width: 32px; height:32px;
+            background: radial-gradient(circle at 30% 30%, #ffffff, #f8f9fa);
+            border-radius: 50%; position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.14);
+            transition: background 0.3s;
+        }
+        .octopus-eye::after {
+            content:''; position: absolute; width: 50%; height: 50%;
+            background: radial-gradient(circle, #2c3e50, #34495e);
+            border-radius: 50%; top: 50%; left: 50%; transform:translate(-50%,-50%);
+        }
+        .octopus-eye.sad { background: radial-gradient(circle at 40% 50%, #fff, #cfd8dc);}
+        .octopus-eye.angry::after { background: radial-gradient(circle, #34495e, #c0392b);}
+        /* EYEBROWS */
+        .octopus-eyebrows {
+            position: absolute; top: 20%; left: 50%; display: flex; gap: 50px;
+            width: 110px; transform: translateX(-50%); pointer-events: none; z-index:3;
+        }
+        .octopus-eyebrow {
+            width:32px; height:9px; background: #2c3e50; border-radius:8px; opacity: 0; transition: all 0.4s;
+        }
+        .octopus-eyebrow.left.angry { transform: rotate(-24deg) translateY(2px); opacity: 1;}
+        .octopus-eyebrow.right.angry { transform: rotate(24deg) translateY(2px); opacity: 1;}
+        /* MOUTH */
+        .octopus-mouth { position: absolute; bottom: 35%; left: 50%; transform: translateX(-50%);
+            width: 26px; height:14px; border: 3px solid #2c3e50; border-top: none;
+            border-radius: 0 0 24px 24px; background: none; z-index: 2; transition: all 0.2s;
+        }
+        .octopus-mouth.smile { border-top: 3px solid #2c3e50; border-bottom: none; border-radius: 0 0 30px 30px / 0 0 40px 40px; height: 19px;}
+        .octopus-mouth.frown { border-bottom: 3px solid #2c3e50; border-top: none; border-radius: 0 0 22px 22px / 0 0 12px 12px; height: 10px;}
+        .octopus-mouth.oh { border: none; background: #2c3e50; border-radius: 50%; width:18px; height:18px; top:60%;}
+        /* Arm */
+        .octopus-arm {
+            position: absolute; width: 18px; height: 112px;
+            background: linear-gradient(145deg, #ff69b4, #e91e63);
+            border-radius: 9px; top: 18%; right: -55px; transform-origin: top center; transform: rotate(16deg);
+            transition: all 1s cubic-bezier(0.25,0.46,0.45,0.94); box-shadow: 0 5px 14px rgba(0,0,0,0.3); z-index:4;
+        }
+        .octopus-arm.reaching { transform: rotate(80deg) translateY(-35px) scale(1.4); height: 130px;}
+        .octopus-arm.pulling-lid {transform: rotate(-23deg) translateY(-65px) scale(1.2); height: 118px; left: -42px; top: 0%; transition: all 0.8s;}
+        .octopus-arm::after {
+            content: ''; position: absolute; bottom: -12px; left: -8px; width: 24px; height: 24px;
+            background: radial-gradient(circle, #ff69b4, #e91e63); border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        /* Tentacles */
+        .octopus-tentacles {
+            position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px;
+        }
+        .octopus-tentacle { width: 13px; height: 54px;
+            background: linear-gradient(180deg, #ff69b4, #e91e63, #d81b60);
+            border-radius: 6px 6px 16px 16px;
+            animation: tentacle-wave 3s ease-in-out infinite;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.14);
+        }
+        .octopus-tentacle:nth-child(1) {animation-delay:0s;}
+        .octopus-tentacle:nth-child(2) {animation-delay:0.5s;}
+        .octopus-tentacle:nth-child(3) {animation-delay:1s;}
+        .octopus-tentacle:nth-child(4) {animation-delay:1.5s;}
+        .octopus-tentacle:nth-child(5) {animation-delay:2s;}
+        .octopus-tentacle:nth-child(6) {animation-delay:2.5s;}
+        @keyframes tentacle-wave {0%,100%{transform:rotate(0deg) translateY(0px);} 25%{transform:rotate(9deg) translateY(-7px);} 50%{transform:rotate(0deg) translateY(0px);} 75%{transform:rotate(-9deg) translateY(-7px);}}
+
+        .reset-button {
+            background: linear-gradient(145deg, #3498db, #2980b9); color: white; border: none;
+            padding: 16px 32px; border-radius: 25px; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.2); text-transform: uppercase;
+        }
+        .reset-button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(52,152,219,0.4);}
+        /* Responsive */
+        @media (max-width: 768px) {
+            .box-3d, .box-front, .box-back, .box-left, .box-right, .box-top, .box-bottom, .box-lid { width: 220px; height: 220px;}
+            .box-front{transform:translateZ(110px);}
+            .box-back{transform:translateZ(-110px);}
+            .box-left{transform:rotateY(-90deg) translateZ(110px);}
+            .box-right{transform:rotateY(90deg) translateZ(110px);}
+            .box-top{transform:rotateX(90deg) translateZ(110px);}
+            .box-bottom{transform:rotateX(-90deg) translateZ(-110px);}
+            .box-scene{transform:rotateX(-10deg) rotateY(5deg);}
+            .octopus-inside{width:108px;height:108px;}
+            .octopus-arm{height:80px;}
+        }
+        @media (max-width: 480px) {
+            .box-3d, .box-front, .box-back, .box-left, .box-right, .box-top, .box-bottom, .box-lid { width: 140px; height: 140px;}
+            .box-front{transform:translateZ(70px);}
+            .box-back{transform:translateZ(-70px);}
+            .box-left{transform:rotateY(-90deg) translateZ(70px);}
+            .box-right{transform:rotateY(90deg) translateZ(70px);}
+            .box-top{transform:rotateX(90deg) translateZ(70px);}
+            .box-bottom{transform:rotateX(-90deg) translateZ(-70px);}
+            .box-scene{transform:rotateX(-5deg);}
+            .octopus-inside{width:50px;height:50px;}
+            .octopus-arm{height:36px;}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box-scene">
+            <div class="box-3d">
+                <div class="box-face box-front">
+                    <div class="glass-front"></div>
+                
+                </div>
+                <div class="box-face box-back"></div>
+                <div class="box-face box-left"></div>
+                <div class="box-face box-right"></div>
+                <div class="box-face box-top"></div>
+                <div class="box-face box-bottom"></div>
+                <div class="box-lid" id="lid"></div>
+                <div class="box-switch" id="switch"><div class="switch-indicator"></div></div>
+                <!-- Octopus -->
+                <div class="octopus-inside" id="octopus">
+                    <div class="octopus-body">
+                        <div class="octopus-eyes">
+                            <div class="octopus-eye"></div>
+                            <div class="octopus-eye"></div>
+                        </div>
+                        <div class="octopus-eyebrows" id="octopusEyebrows">
+                            <div class="octopus-eyebrow left"></div>
+                            <div class="octopus-eyebrow right"></div>
+                        </div>
+                        <div class="octopus-mouth" id="octopusMouth"></div>
+                        <div class="octopus-arm" id="octopusArm"></div>
+                        <div class="octopus-tentacles">
+                            <div class="octopus-tentacle"></div>
+                            <div class="octopus-tentacle"></div>
+                            <div class="octopus-tentacle"></div>
+                            <div class="octopus-tentacle"></div>
+                            <div class="octopus-tentacle"></div>
+                            <div class="octopus-tentacle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let isAnimating = false;
+        let switchState = false;
+        const switchEl = document.getElementById('switch');
+        const lidEl = document.getElementById('lid');
+        const octopusEl = document.getElementById('octopus');
+        const octopusArmEl = document.getElementById('octopusArm');
+        /* ------ EMOTION handling ------ */
+        function setEmotion(emotion) {
+            const mouth = document.getElementById('octopusMouth');
+            const eyes = document.querySelectorAll('.octopus-eye');
+            const eyebrows = document.querySelectorAll('.octopus-eyebrow');
+            // Reset
+            mouth.className = 'octopus-mouth';
+            eyes.forEach(e => e.className = 'octopus-eye');
+            eyebrows.forEach(e => e.className = 'octopus-eyebrow');
+            if (emotion === 'surprised') {
+                mouth.classList.add('oh');
+            } else if (emotion === 'sad') {
+                mouth.classList.add('frown');
+                eyes.forEach(e => e.classList.add('sad'));
+            } else if (emotion === 'angry') {
+                mouth.classList.add('frown');
+                eyes.forEach(e => e.classList.add('angry'));
+                eyebrows[0].classList.add('left','angry');
+                eyebrows[1].classList.add('right','angry');
+            } else if (emotion === 'smile') {
+                mouth.classList.add('smile');
+            }
+        }
+        /* ------ Animation sequence ------ */
+        switchEl.addEventListener('click', function() {
+            if (isAnimating) return;
+            if (!switchState) activateOctopusGuardian();
+        });
+        function activateOctopusGuardian() {
+            if (isAnimating) return;
+            isAnimating = true;
+            switchState = true;
+            setEmotion('surprised');
+            switchEl.classList.add('on');
+            switchEl.style.pointerEvents = 'none';
+            setTimeout(() => { lidEl.classList.add('open'); }, 300);
+            setTimeout(() => { octopusEl.classList.add('emerge'); setEmotion('angry'); }, 800);
+            setTimeout(() => { octopusArmEl.classList.add('reaching'); }, 1500);
+            setTimeout(() => { setEmotion('smile'); switchEl.classList.remove('on'); switchState = false; }, 2200);
+            setTimeout(() => { octopusArmEl.classList.remove('reaching'); octopusEl.classList.remove('emerge'); octopusEl.classList.add('hiding'); setEmotion('sad'); }, 2800);
+            setTimeout(() => { octopusArmEl.classList.add('pulling-lid'); lidEl.classList.add('closing'); }, 3200);
+            setTimeout(() => { lidEl.classList.remove('open'); lidEl.classList.remove('closing'); }, 3800);
+            setTimeout(() => { octopusEl.classList.remove('hiding'); octopusArmEl.classList.remove('pulling-lid'); setEmotion('smile'); }, 4200);
+            setTimeout(() => { switchEl.style.pointerEvents = 'auto'; isAnimating = false; setEmotion(''); }, 4600);
+        }
+        function resetBox() {
+            if (isAnimating) return;
+            switchEl.classList.remove('on');
+            lidEl.classList.remove('open','closing');
+            octopusEl.classList.remove('emerge','hiding');
+            octopusArmEl.classList.remove('reaching','pulling-lid');
+            setEmotion('');
+            switchEl.style.pointerEvents = 'auto';
+            switchState = false; isAnimating = false;
+        }
+        setInterval(() => {
+            if (!isAnimating) {
+                const box = document.querySelector('.box-3d');
+                box.style.transform = 'scale(1.01)';
+                setTimeout(() => { box.style.transform = 'scale(1)'; }, 900);
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

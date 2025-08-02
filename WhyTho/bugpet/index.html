@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BugPet™</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+  
+  <!-- Grid Background -->
+  <div class="grid-background">
+    <div class="grid-static"></div>
+    <div class="grid-moving"></div>
+    <div class="grid-diagonal"></div>
+    <div class="grid-dots"></div>
+    <div class="grid-highlight"></div>
+  </div>
+
+  <!-- Moving Bug Elements -->
+  <div class="moving-elements">
+    <!-- Crawling Bugs -->
+    <div class="bug crawling-bug bug-1">🐛</div>
+    <div class="bug crawling-bug bug-2">🪲</div>
+    <div class="bug crawling-bug bug-3">🐞</div>
+    <div class="bug crawling-bug bug-4">🦗</div>
+    
+    <!-- Flying Bugs -->
+    <div class="bug flying-bug fly-1">🦋</div>
+    <div class="bug flying-bug fly-2">🐝</div>
+    <div class="bug flying-bug fly-3">🪰</div>
+    
+    <!-- Floating Code Fragments -->
+    <div class="code-fragment fragment-1">{}</div>
+    <div class="code-fragment fragment-2">[]</div>
+    <div class="code-fragment fragment-3">&lt;/&gt;</div>
+    <div class="code-fragment fragment-4">;</div>
+    
+    <!-- Bug Swarms -->
+    <div class="bug-swarm swarm-1">
+      <div class="swarm-bug">🐜</div>
+      <div class="swarm-bug">🐜</div>
+      <div class="swarm-bug">🐜</div>
+    </div>
+    
+    <div class="bug-swarm swarm-2">
+      <div class="swarm-bug">🦟</div>
+      <div class="swarm-bug">🦟</div>
+      <div class="swarm-bug">🦟</div>
+    </div>
+  </div>
+  
+  <!-- Progress Bar -->
+  <div class="progress-bar"></div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>🐛 BugPet™</h1>
+    <p class="tagline">Your emotional support bug. Warning: It may overreact.</p>
+
+    <div class="input-group">
+      <input type="text" id="bugName" placeholder="Name your bug..." />
+      <input type="text" id="userNickname" placeholder="What should your bug call you?" />
+      <button onclick="adoptBug()" class="adopt-btn">Adopt Bug 🐣</button>
+    </div>
+
+    <div id="bugCard" class="hidden bug-card">
+      <h2 id="bugDisplayName"></h2>
+      <div class="bugFace">🪲</div>
+      <p id="bugStats">Hunger: 0/10</p>
+      <p id="bugMood" class="moodBox">Mood: Curious</p>
+
+      <div class="feed-section">
+        <textarea id="codeInput" placeholder="Feed some code..."></textarea>
+        <button onclick="feedBug()" class="feed-btn">Feed Bug 🍜</button>
+      </div>
+
+      <p id="reaction" class="reactionMsg"></p>
+
+      <hr class="divider" />
+      
+      <div class="chat-section">
+        <h3>Talk to your bug 🫶</h3>
+        <textarea id="userMessage" placeholder="Share your thoughts..."></textarea>
+        <button onclick="chatWithBug()" class="chat-btn">Send 💬</button>
+        <div id="chatResponse" class="chatBox"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>🪲 Made with 🧃 by MoodLabs</footer>
+  <script src="script.js"></script>
+</body>
+</html> 

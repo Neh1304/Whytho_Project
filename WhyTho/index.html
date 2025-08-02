@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhyTho™</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+    :root {
+      --bg-primary: #0a0a0b;
+      --bg-secondary: #121214;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --accent-primary: #00d4ff;
+      --accent-secondary: #7c3aed;
+      --accent-tertiary: #f59e0b;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      --gradient-6: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-animation::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(30px, -30px) rotate(120deg); }
+      66% { transform: translate(-20px, 20px) rotate(240deg); }
+    }
+
+    /* Grid Background */
+    .grid-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      opacity: 0.3;
+    }
+
+    .grid-static {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridPulse 4s ease-in-out infinite;
+    }
+
+    .grid-moving {
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background-image: 
+        linear-gradient(rgba(124, 58, 237, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124, 58, 237, 0.15) 1px, transparent 1px);
+      background-size: 80px 80px;
+      animation: gridMove 25s linear infinite;
+    }
+
+    .grid-diagonal {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background-image: 
+        linear-gradient(45deg, rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+        linear-gradient(-45deg, rgba(245, 158, 11, 0.08) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridDiagonal 30s linear infinite;
+    }
+
+    .grid-dots {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(circle at center, rgba(0, 212, 255, 0.2) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridDotsPulse 6s ease-in-out infinite;
+    }
+
+    .grid-highlight {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 212, 255, 0.1) 30%, 
+        rgba(124, 58, 237, 0.1) 70%, 
+        transparent 100%
+      );
+      animation: gridSweep 8s ease-in-out infinite;
+      transform: translateX(-100%);
+    }
+
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-80px, -80px); }
+    }
+
+    @keyframes gridDiagonal {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(-60px, -60px) rotate(360deg); }
+    }
+
+    @keyframes gridDotsPulse {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.1); }
+    }
+
+    @keyframes gridSweep {
+      0% { transform: translateX(-100%) skewX(-15deg); }
+      50% { transform: translateX(100%) skewX(-15deg); }
+      100% { transform: translateX(-100%) skewX(-15deg); }
+    }
+
+    /* Moving Trucks Animation */
+    .moving-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .truck {
+      position: absolute;
+      width: 60px;
+      height: 30px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 4px 8px 8px 4px;
+      opacity: 0.6;
+      filter: blur(0.5px);
+    }
+
+    .truck::before {
+      content: '';
+      position: absolute;
+      left: -15px;
+      top: 2px;
+      width: 18px;
+      height: 26px;
+      background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+      border-radius: 6px 2px 2px 6px;
+    }
+
+    .truck::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 8px;
+      width: 40px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 1px;
+      box-shadow: 
+        -6px 0 0 -1px rgba(255, 255, 255, 0.2),
+        46px 0 0 -1px rgba(255, 255, 255, 0.2);
+    }
+
+    .truck-1 {
+      top: 20%;
+      animation: truckMoveRight 25s linear infinite;
+    }
+
+    .truck-2 {
+      top: 45%;
+      animation: truckMoveLeft 30s linear infinite;
+      background: linear-gradient(135deg, var(--accent-tertiary), #f97316);
+    }
+
+    .truck-2::before {
+      background: linear-gradient(135deg, #f97316, var(--accent-tertiary));
+    }
+
+    .truck-3 {
+      top: 70%;
+      animation: truckMoveRight 35s linear infinite;
+      background: linear-gradient(135deg, #10b981, #059669);
+      animation-delay: -10s;
+    }
+
+    .truck-3::before {
+      background: linear-gradient(135deg, #059669, #10b981);
+    }
+
+    .truck-4 {
+      top: 85%;
+      animation: truckMoveLeft 28s linear infinite;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      animation-delay: -15s;
+    }
+
+    .truck-4::before {
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+    }
+
+    @keyframes truckMoveRight {
+      0% { 
+        transform: translateX(-80px); 
+        opacity: 0; 
+      }
+      5% { 
+        opacity: 0.6; 
+      }
+      95% { 
+        opacity: 0.6; 
+      }
+      100% { 
+        transform: translateX(calc(100vw + 80px)); 
+        opacity: 0; 
+      }
+    }
+
+    @keyframes truckMoveLeft {
+      0% { 
+        transform: translateX(calc(100vw + 80px)) scaleX(-1); 
+        opacity: 0; 
+      }
+      5% { 
+        opacity: 0.6; 
+      }
+      95% { 
+        opacity: 0.6; 
+      }
+      100% { 
+        transform: translateX(-80px) scaleX(-1); 
+        opacity: 0; 
+      }
+    }
+
+    /* Floating Data Packets */
+    .data-packet {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-primary);
+      border-radius: 2px;
+      opacity: 0.4;
+      animation: dataFlow 12s linear infinite;
+    }
+
+    .packet-1 {
+      top: 25%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .packet-2 {
+      top: 50%;
+      left: 30%;
+      animation-delay: -3s;
+      background: var(--accent-secondary);
+    }
+
+    .packet-3 {
+      top: 35%;
+      left: 60%;
+      animation-delay: -6s;
+      background: var(--accent-tertiary);
+    }
+
+    .packet-4 {
+      top: 65%;
+      left: 80%;
+      animation-delay: -9s;
+      background: #10b981;
+    }
+
+    @keyframes dataFlow {
+      0% { 
+        transform: translateX(0) translateY(0) scale(1); 
+        opacity: 0; 
+      }
+      10% { 
+        opacity: 0.4; 
+      }
+      50% { 
+        transform: translateX(200px) translateY(-50px) scale(1.2); 
+        opacity: 0.6; 
+      }
+      90% { 
+        opacity: 0.4; 
+      }
+      100% { 
+        transform: translateX(400px) translateY(-100px) scale(0.8); 
+        opacity: 0; 
+      }
+    }
+
+    /* Flying Drones */
+    .drone {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(45deg, var(--accent-primary), transparent, var(--accent-primary));
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: droneFloat 20s ease-in-out infinite;
+    }
+
+    .drone::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 
+        -8px -8px 0 -2px var(--accent-primary),
+        8px -8px 0 -2px var(--accent-primary),
+        -8px 8px 0 -2px var(--accent-primary),
+        8px 8px 0 -2px var(--accent-primary);
+    }
+
+    .drone-1 {
+      top: 15%;
+      left: 20%;
+      animation-delay: 0s;
+    }
+
+    .drone-2 {
+      top: 60%;
+      left: 70%;
+      animation-delay: -10s;
+      background: linear-gradient(45deg, var(--accent-secondary), transparent, var(--accent-secondary));
+    }
+
+    .drone-2::before {
+      background: var(--accent-secondary);
+      box-shadow: 
+        -8px -8px 0 -2px var(--accent-secondary),
+        8px -8px 0 -2px var(--accent-secondary),
+        -8px 8px 0 -2px var(--accent-secondary),
+        8px 8px 0 -2px var(--accent-secondary);
+    }
+
+    @keyframes droneFloat {
+      0%, 100% { 
+        transform: translate(0, 0) rotate(0deg); 
+      }
+      25% { 
+        transform: translate(100px, -30px) rotate(90deg); 
+      }
+      50% { 
+        transform: translate(200px, 20px) rotate(180deg); 
+      }
+      75% { 
+        transform: translate(100px, 50px) rotate(270deg); 
+      }
+    }
+
+    /* Intro Animation */
+    #intro {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: slideUp 0.8s ease-in-out 4s forwards;
+    }
+
+    #intro h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: scaleIn 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      text-align: center;
+    }
+
+    #intro .tagline {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: var(--text-secondary);
+      margin-top: 1rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.5s forwards;
+      text-align: center;
+      max-width: 80%;
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      animation: bounce 1.4s ease-in-out infinite both;
+    }
+
+    .dot:nth-child(1) { animation-delay: -0.32s; }
+    .dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes scaleIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      0% { transform: translateY(30px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      to { transform: translateY(-100%); }
+    }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    /* Main Content */
+    #mainContent {
+      display: none;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .header .subtitle {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      color: var(--text-secondary);
+      font-weight: 400;
+      animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    /* Modules Grid */
+    .modules {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .card {
+      position: relative;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: fadeInUp 0.6s ease both;
+      cursor: pointer;
+    }
+
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+    .card:nth-child(4) { animation-delay: 0.4s; }
+    .card:nth-child(5) { animation-delay: 0.5s; }
+    .card:nth-child(6) { animation-delay: 0.6s; }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--gradient-1);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 24px;
+    }
+
+    .card:nth-child(2)::before { background: var(--gradient-2); }
+    .card:nth-child(3)::before { background: var(--gradient-3); }
+    .card:nth-child(4)::before { background: var(--gradient-4); }
+    .card:nth-child(5)::before { background: var(--gradient-5); }
+    .card:nth-child(6)::before { background: var(--gradient-6); }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .card:hover::before {
+      opacity: 0.1;
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .card h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover h2 {
+      background: linear-gradient(135deg, #ffffff, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .card p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      transition: color 0.3s ease;
+    }
+
+    .card:hover p {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .card-icon {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .card:hover .card-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      opacity: 0.6;
+      animation: fadeInUp 0.8s ease 0.8s both;
+    }
+
+    /* Scroll Progress Bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      transform-origin: left;
+      transform: scaleX(0);
+      z-index: 100;
+      transition: transform 0.1s ease;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary));
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .modules {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .card {
+        padding: 2rem;
+      }
+      
+      #mainContent {
+        padding: 1rem;
+      }
+    }
+
+    /* Glassmorphism effects */
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.3;
+      }
+      90% {
+        opacity: 0.3;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+  
+  <!-- Grid Background -->
+  <div class="grid-background">
+    <div class="grid-static"></div>
+    <div class="grid-moving"></div>
+    <div class="grid-diagonal"></div>
+    <div class="grid-dots"></div>
+    <div class="grid-highlight"></div>
+  </div>
+
+  <!-- Moving Elements -->
+  <div class="moving-elements">
+    <!-- Trucks -->
+    <div class="truck truck-1"></div>
+    <div class="truck truck-2"></div>
+    <div class="truck truck-3"></div>
+    <div class="truck truck-4"></div>
+    
+    <!-- Data Packets -->
+    <div class="data-packet packet-1"></div>
+    <div class="data-packet packet-2"></div>
+    <div class="data-packet packet-3"></div>
+    <div class="data-packet packet-4"></div>
+    
+    <!-- Drones -->
+    <div class="drone drone-1"></div>
+    <div class="drone drone-2"></div>
+  </div>
+  
+  <!-- Progress Bar -->
+  <div class="progress-bar"></div>
+
+  <!-- Intro Animation Screen -->
+  <div id="intro">
+    <h1>WhyTho™</h1>
+    <p class="tagline">The Premium Collection of Pointless Intelligence</p>
+    <div class="loading-dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="mainContent">
+    <div class="container">
+      <header class="header">
+        <h1>WhyTho™</h1>
+        <p class="subtitle">The Premium Collection of Pointless Intelligence</p>
+      </header>
+
+      <section class="modules">
+        <a href="kuzhiscan/index.html" class="card glass">
+          <div class="card-content">
+            <h2>KuzhiScan</h2>
+            <p>Measure your appam holes with pseudo-ML precision. Who cares? We do.</p>
+          </div>
+          <div class="card-icon">🕳️</div>
+        </a>
+
+        <a href="moodjuice/index.html" class="card glass">
+          <div class="card-content">
+            <h2>MoodJuice</h2>
+            <p>Upload a picture of your drink and get its emotional status. Support your chai's feelings today.</p>
+          </div>
+          <div class="card-icon">🧃</div>
+        </a>
+
+        <a href="bugpet/index.html" class="card glass">
+          <div class="card-content">
+            <h2>BugPet</h2>
+            <p>Adopt a software bug. Feed it deprecated code. Let it crash your dreams with joy.</p>
+          </div>
+          <div class="card-icon">🐛</div>
+        </a>
+
+        <a href="telltime/index.html" class="card glass">
+          <div class="card-content">
+            <h2>TellTime</h2>
+            <p>Delightfully Useless Facts... Delivered Right to Your Inbox!</p>
+          </div>
+          <div class="card-icon">⏰</div>
+        </a>
+
+        <a href="echomystic/index.html" class="card glass">
+          <div class="card-content">
+            <h2>EchoMystic</h2>
+            <p>Whisper your secrets into the void... and watch them mystically echo back!</p>
+          </div>
+          <div class="card-icon">🔮</div>
+        </a>
+
+        <a href="octopus.html" class="card glass">
+          <div class="card-content">
+            <h2>Useless Box</h2>
+            <p>Touch the switch, awaken the guardian, and hear your secrets echo in the shadows!</p>
+          </div>
+          <div class="card-icon">📦</div>
+        </a>
+      </section>
+
+      <div class="footer">
+        © 2025 WhyTho Inc. | Made with no purpose whatsoever
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Intro animation and main content reveal
+    setTimeout(() => {
+      document.getElementById("mainContent").style.display = "block";
+    }, 4800);
+
+    // Scroll progress bar
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollPercent = (scrollTop / scrollHeight) * 100;
+      document.querySelector('.progress-bar').style.transform = `scaleX(${scrollPercent}%)`;
+    });
+
+    // Add floating particles
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      particle.style.animationDelay = Math.random() * 2 + 's';
+      document.body.appendChild(particle);
+
+      setTimeout(() => {
+        particle.remove();
+      }, 8000);
+    }
+
+    // Create particles periodically
+    setInterval(createParticle, 3000);
+
+    // Add mouse move parallax effect
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      const bgAnimation = document.querySelector('.bg-animation::before');
+      if (bgAnimation) {
+        document.documentElement.style.setProperty('--mouse-x', mouseX);
+        document.documentElement.style.setProperty('--mouse-y', mouseY);
+      }
+    });
+
+    // Intersection Observer for card animations
+    const cards = document.querySelectorAll('.card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => observer.observe(card));
+  </script>
+</body>
+</html>

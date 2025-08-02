@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KuzhiScan™ - Appam Hole Detection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+  
+  <!-- Grid Background -->
+  <div class="grid-background">
+    <div class="grid-static"></div>
+    <div class="grid-moving"></div>
+  </div>
+
+  <!-- Back Button -->
+  <a href="../index.html" class="back-button">← Back to WhyTho™</a>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>KuzhiScan™</h1>
+      <p class="subtitle">Measure your appam holes with pseudo-ML precision. Who cares? We do.</p>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <h2>Upload Your Appam</h2>
+        <p>Let our advanced AI analyze the intricate hole patterns of your perfect appam</p>
+        
+        <div class="file-upload">
+          <input type="file" id="appamInput" accept="image/*" />
+          <label for="appamInput" class="file-upload-label">
+            <div class="file-upload-icon">🕳️</div>
+            <div class="file-upload-text">Click to upload your appam image</div>
+          </label>
+        </div>
+
+        <button class="scan-button" onclick="scanHoles()" id="scanBtn">
+          Scan for Kuzhis 🔍
+        </button>
+
+        <div class="loading" id="loading">
+          <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <p style="margin-top: 1rem; color: var(--text-secondary);">Analyzing appam holes...</p>
+        </div>
+
+        <div id="statusMessage"></div>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-section">
+        <h2>Scan Results</h2>
+        
+        <div class="image-preview" id="imagePreview">
+          <img id="appamImage" style="display: none; max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 16px;" />
+          <div class="preview-placeholder" id="previewPlaceholder">Your appam will appear here</div>
+        </div>
+
+        <div class="result-display" id="result">
+          <div class="result-count" id="resultCount">0</div>
+          <div class="result-text">Kuzhis Detected</div>
+          <div class="result-message" id="resultMessage">
+            Upload an appam to see the magical hole analysis!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
