@@ -48,7 +48,7 @@ For Hardware:
 For Software:
 # Installation
 [Clone the repository from GitHub using the following command:
-git clone https://github.com/Neh1304/WhyTho.git
+git clone https://whytho-project.vercel.app/
 Then navigate into the project directory:
 cd WhyTho
 
